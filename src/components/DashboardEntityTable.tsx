@@ -16,10 +16,10 @@ const entityData = [
 ];
 
 const DashboardEntityTable = () => (
-  <Paper sx={{ mb: 2, p: 2 }}>
+  <Paper sx={{ mb: 2, p: 2, minHeight: 340, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
     <Typography variant="body2" fontWeight={500} mb={1}>Entity-wise Performance</Typography>
-    <TableContainer>
-      <Table size="small">
+    <TableContainer sx={{ minHeight: 280 }}>
+      <Table size="small" sx={{ minHeight: 280 }}>
         <TableHead>
           <TableRow>
             <TableCell>Company Name</TableCell>

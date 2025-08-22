@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Paper, Typography, TextField, IconButton, Button, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@mui/material';
 import BusinessIcon from '@mui/icons-material/Business';
 import PersonIcon from '@mui/icons-material/Person';
@@ -47,49 +47,56 @@ const companies = [
   },
 ];
 
-const CompaniesList = () => (
-  <Box sx={{ display: 'flex', minHeight: '100vh', background: '#f7f8fa' }}>
-    <Sidebar />
-    <Box sx={{ flex: 1, ml: '72px', p: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, px: 1 }}>
-        <TableChartIcon sx={{ fontSize: 28, color: '#222', mr: 1 }} />
-        <Typography variant="h6" fontWeight={700} sx={{ mr: 3 }}>
-          List of Companies
-        </Typography>
-        <TextField
-          variant="outlined"
-          size="small"
-          placeholder="Search Companies"
-          sx={{ mr: 1, width: 260, background: '#fff' }}
-          InputProps={{
-            sx: { borderRadius: 2, fontSize: 15 },
-          }}
-        />
-        <IconButton color="primary" sx={{ bgcolor: '#f5faff', borderRadius: 2, border: '1px solid #e0e0e0', ml: 1, mr: 2 }}>
-          <FilterListIcon />
-        </IconButton>
-        <Box sx={{ flexGrow: 1 }} />
-        {/* Quick Info, Bell, AI Chat */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
-          <Button startIcon={<AllInboxIcon sx={{ color: '#d97706' }} />} sx={{ bgcolor: '#fff7e6', color: '#d97706', fontWeight: 500, borderRadius: 2, px: 2, textTransform: 'none', boxShadow: 0, border: 'none', minWidth: 0 }}>
-            Quben Infra
-          </Button>
-          <IconButton sx={{ bgcolor: '#fff', borderRadius: 2, border: '1px solid #e0e0e0', p: 1 }}>
-            <NotificationsNoneIcon sx={{ color: '#222' }} />
+const CompaniesList = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredCompanies = companies.filter(c =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return (
+    <Box sx={{ display: 'flex', minHeight: '100vh', background: '#f7f8fa' }}>
+      <Sidebar />
+      <Box sx={{ flex: 1, ml: '72px', p: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, px: 1 }}>
+          <TableChartIcon sx={{ fontSize: 28, color: '#222', mr: 1 }} />
+          <Typography variant="h6" fontWeight={700} sx={{ mr: 3 }}>
+            List of Companies
+          </Typography>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search Companies"
+            sx={{ mr: 1, width: 260, background: '#fff' }}
+            InputProps={{
+              sx: { borderRadius: 2, fontSize: 15 },
+            }}
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <IconButton color="primary" sx={{ bgcolor: '#f5faff', borderRadius: 2, border: '1px solid #e0e0e0', ml: 1, mr: 2 }}>
+            <FilterListIcon />
           </IconButton>
-          <Button startIcon={<ChatBubbleOutlineIcon sx={{ color: '#f57c00' }} />} sx={{ bgcolor: '#fff7e6', color: '#f57c00', fontWeight: 500, borderRadius: 2, px: 2, textTransform: 'none', boxShadow: 0, border: 'none', minWidth: 0 }}>
-            AI Chat
+          <Box sx={{ flexGrow: 1 }} />
+          {/* Quick Info, Bell, AI Chat */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+            <Button startIcon={<AllInboxIcon sx={{ color: '#d97706' }} />} sx={{ bgcolor: '#fff7e6', color: '#d97706', fontWeight: 500, borderRadius: 2, px: 2, textTransform: 'none', boxShadow: 0, border: 'none', minWidth: 0 }}>
+              Quben Infra
+            </Button>
+            <IconButton sx={{ bgcolor: '#fff', borderRadius: 2, border: '1px solid #e0e0e0', p: 1 }}>
+              <NotificationsNoneIcon sx={{ color: '#222' }} />
+            </IconButton>
+            <Button startIcon={<ChatBubbleOutlineIcon sx={{ color: '#f57c00' }} />} sx={{ bgcolor: '#fff7e6', color: '#f57c00', fontWeight: 500, borderRadius: 2, px: 2, textTransform: 'none', boxShadow: 0, border: 'none', minWidth: 0 }}>
+              AI Chat
+            </Button>
+          </Box>
+          <Button variant="outlined" sx={{ mr: 2, borderRadius: 2, textTransform: 'none', fontWeight: 500, px: 2 }}>
+            &#8681; Export
+          </Button>
+          <Button variant="outlined" sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 500, px: 2, bgcolor: '#f5faff', border: '1px solid #e0e0e0' }}>
+            + Add Company
           </Button>
         </Box>
-        <Button variant="outlined" sx={{ mr: 2, borderRadius: 2, textTransform: 'none', fontWeight: 500, px: 2 }}>
-          &#8681; Export
-        </Button>
-        <Button variant="outlined" sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 500, px: 2, bgcolor: '#f5faff', border: '1px solid #e0e0e0' }}>
-          + Add Company
-        </Button>
-      </Box>
-      <Paper>
-        <Table size="small">
+      <Paper sx={{ minHeight: 420, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+        <Table size="small" sx={{ minHeight: 420 }}>
           <TableHead>
             <TableRow>
               <TableCell>Company Name</TableCell>
@@ -102,7 +109,7 @@ const CompaniesList = () => (
             </TableRow>
           </TableHead>
           <TableBody>
-            {companies.map((c, idx) => (
+            {filteredCompanies.map((c, idx) => (
               <TableRow key={idx} hover>
                 <TableCell><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><BusinessIcon sx={{ color: '#1976d2' }} />{c.name}</Box></TableCell>
                 <TableCell><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><PersonIcon sx={{ color: '#ab47bc' }} />{c.ceo}</Box></TableCell>
@@ -122,8 +129,9 @@ const CompaniesList = () => (
           </TableBody>
         </Table>
       </Paper>
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default CompaniesList;
