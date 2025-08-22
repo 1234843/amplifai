@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Paper, Typography, TextField, IconButton, Button, Table, TableHead, TableRow, TableCell, TableBody, Chip } from '@mui/material';
+import { Box, Paper, Typography, TextField, IconButton, Button, Table, TableHead, TableRow, TableCell, TableBody, Chip, InputAdornment } from '@mui/material';
 import BusinessIcon from '@mui/icons-material/Business';
+import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -49,32 +50,26 @@ const companies = [
 
 const CompaniesList = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
   const filteredCompanies = companies.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const pageCount = Math.ceil(filteredCompanies.length / pageSize);
+  const pagedCompanies = filteredCompanies.slice((page - 1) * pageSize, page * pageSize);
+  const handlePrev = () => setPage(p => Math.max(1, p - 1));
+  const handleNext = () => setPage(p => Math.min(pageCount, p + 1));
+  const handlePage = (p: number) => setPage(p);
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', background: '#f7f8fa' }}>
       <Sidebar />
       <Box sx={{ flex: 1, ml: '72px', p: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, px: 1 }}>
+        {/* Header row: icon + label + right controls */}
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, px: 1 }}>
           <TableChartIcon sx={{ fontSize: 28, color: '#222', mr: 1 }} />
           <Typography variant="h6" fontWeight={700} sx={{ mr: 3 }}>
             List of Companies
           </Typography>
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="Search Companies"
-            sx={{ mr: 1, width: 260, background: '#fff' }}
-            InputProps={{
-              sx: { borderRadius: 2, fontSize: 15 },
-            }}
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-          <IconButton color="primary" sx={{ bgcolor: '#f5faff', borderRadius: 2, border: '1px solid #e0e0e0', ml: 1, mr: 2 }}>
-            <FilterListIcon />
-          </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           {/* Quick Info, Bell, AI Chat */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
@@ -88,6 +83,29 @@ const CompaniesList = () => {
               AI Chat
             </Button>
           </Box>
+        </Box>
+        {/* Controls row: search/filter/export/add company */}
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, px: 1 }}>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search Companies"
+            sx={{ mr: 1, width: 260, background: '#fff' }}
+            InputProps={{
+              sx: { borderRadius: 2, fontSize: 15 },
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: '#bdbdbd' }} />
+                </InputAdornment>
+              ),
+            }}
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <IconButton color="primary" sx={{ bgcolor: '#f5faff', borderRadius: 2, border: '1px solid #e0e0e0', ml: 1, mr: 2 }}>
+            <FilterListIcon />
+          </IconButton>
+          <Box sx={{ flexGrow: 1 }} />
           <Button variant="outlined" sx={{ mr: 2, borderRadius: 2, textTransform: 'none', fontWeight: 500, px: 2 }}>
             &#8681; Export
           </Button>
@@ -95,8 +113,8 @@ const CompaniesList = () => {
             + Add Company
           </Button>
         </Box>
-      <Paper sx={{ minHeight: 420, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-        <Table size="small" sx={{ minHeight: 420 }}>
+      <Paper sx={{ minHeight: 120, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', position: 'relative', pb: 7 }}>
+        <Table size="small" sx={{ minHeight: 80, verticalAlign: 'top' }}>
           <TableHead>
             <TableRow>
               <TableCell>Company Name</TableCell>
@@ -109,7 +127,7 @@ const CompaniesList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredCompanies.map((c, idx) => (
+            {pagedCompanies.map((c, idx) => (
               <TableRow key={idx} hover>
                 <TableCell><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><BusinessIcon sx={{ color: '#1976d2' }} />{c.name}</Box></TableCell>
                 <TableCell><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><PersonIcon sx={{ color: '#ab47bc' }} />{c.ceo}</Box></TableCell>
@@ -128,6 +146,27 @@ const CompaniesList = () => {
             ))}
           </TableBody>
         </Table>
+        {/* Interactive Pagination at bottom right */}
+        <Box sx={{ position: 'absolute', right: 24, bottom: 16, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography sx={{ color: '#888', fontSize: 14, mr: 1 }}>
+            {filteredCompanies.length === 0
+              ? '0'
+              : `${(page - 1) * pageSize + 1}-${Math.min(page * pageSize, filteredCompanies.length)} of ${filteredCompanies.length}`}
+          </Typography>
+          <Button size="small" sx={{ minWidth: 0, px: 1, color: page === 1 ? '#ccc' : '#1976d2', fontWeight: 700, fontSize: 15 }} onClick={handlePrev} disabled={page === 1}>{'<'}</Button>
+          {[...Array(pageCount)].map((_, i) => (
+            <Button
+              key={i}
+              size="small"
+              variant={page === i + 1 ? 'contained' : 'text'}
+              sx={{ minWidth: 0, px: 1, bgcolor: page === i + 1 ? '#fff' : 'transparent', color: page === i + 1 ? '#222' : '#1976d2', fontWeight: page === i + 1 ? 700 : 500, boxShadow: 'none', fontSize: 15 }}
+              onClick={() => handlePage(i + 1)}
+            >
+              {i + 1}
+            </Button>
+          ))}
+          <Button size="small" sx={{ minWidth: 0, px: 1, color: page === pageCount ? '#ccc' : '#1976d2', fontWeight: 700, fontSize: 15 }} onClick={handleNext} disabled={page === pageCount}>NEXT {'>'}</Button>
+        </Box>
       </Paper>
       </Box>
     </Box>

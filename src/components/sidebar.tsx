@@ -25,9 +25,12 @@ const Sidebar = () => {
       zIndex: 1000,
       boxShadow: 2,
     }}>
-      {/* Logo */}
-      <Box sx={{ mb: 3 }}>
-        <img src="/logo192.png" alt="FlowState Logo" style={{ height: 32 }} />
+      {/* Custom blue diamond/arrow icon in dark square */}
+      <Box sx={{ mb: 3, bgcolor: '#212936', borderRadius: 2, p: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="24" height="24" rx="8" fill="#fff" />
+          <path d="M16 9L22 16L16 23L10 16L16 9Z" stroke="#3EC6FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
       </Box>
       {/* Navigation Icons */}
       <IconButton sx={{ color: '#fff', mb: 2 }} onClick={() => navigate('/dashboard')}>
