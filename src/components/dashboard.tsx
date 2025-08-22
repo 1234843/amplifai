@@ -15,16 +15,20 @@ const Dashboard = () => {
       <Box sx={{ flex: 1, ml: '72px', p: 2 }}>
         <DashboardHeader />
         <DashboardTopCards />
-        <Box sx={{ display: 'grid', gridTemplateColumns: '2.5fr 1.2fr', gap: 2, mb: 2, alignItems: 'start' }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'stretch', minHeight: 0 }}>
           {/* Left column: line chart above table */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+          <Box sx={{ flex: 2.5, display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
             <DashboardLineChart />
-            <DashboardEntityTable />
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <DashboardEntityTable />
+            </Box>
           </Box>
           {/* Right column: bar chart above insights */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 400, maxWidth: 520 }}>
+          <Box sx={{ flex: 1.2, display: 'flex', flexDirection: 'column', gap: 2, minWidth: 400, maxWidth: 520 }}>
             <DashboardBarChart />
-            <DashboardInsights />
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <DashboardInsights />
+            </Box>
           </Box>
         </Box>
       </Box>

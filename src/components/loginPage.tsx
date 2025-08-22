@@ -11,7 +11,6 @@ const LoginPage = () => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Left Side - Login Form */}
       <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
         <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
           <Box mb={2} display="flex" alignItems="center">
@@ -48,13 +47,11 @@ const LoginPage = () => {
           </Typography>
         </Paper>
       </Box>
-      {/* Right Side - Info Section */}
       <Box sx={{ flex: 1, background: '#163A5F', color: '#fff', display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
         <Box sx={{ p: 6 }}>
           <Typography variant="h5" fontWeight={700} mb={2}>
             Drive Better Decisions<br />with Centralized Performance & Account Intelligence.
           </Typography>
-          {/* Decorative icons and shapes can be added here if needed */}
         </Box>
       </Box>
     </Box>

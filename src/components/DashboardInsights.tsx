@@ -2,7 +2,7 @@ import React from 'react';
 import { Paper, Typography, Divider, Box } from '@mui/material';
 
 const DashboardInsights = () => (
-  <Paper sx={{ p: 2, bgcolor: '#fff7e6', height: '100%' }}>
+  <Paper sx={{ p: 2, bgcolor: '#fff7e6', height: '89%' }}>
     <Typography variant="body2" fontWeight={500} mb={1}>Insights</Typography>
     <Divider sx={{ mb: 1 }} />
     <Box mb={2}>
